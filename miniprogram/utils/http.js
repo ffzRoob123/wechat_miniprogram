@@ -35,7 +35,7 @@ http.intercept.response = async function ({ data, config }) {
         url: '/pages/login/index?redirectURL=/' + redirectURL,
       })
     }
-
+    // console.log(app.refreshToken)
     // 调用接口获取新的 token
     const res = await http({
       url: '/refreshToken',

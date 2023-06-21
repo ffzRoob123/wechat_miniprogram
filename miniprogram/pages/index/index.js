@@ -11,6 +11,5 @@ Page({
     const { code, data: res } = await wx.http.get('/announcement')
     if (code !== 10000) return wx.utils.toast()
     this.setData({ announcement: res })
-    console.log(res)
   },
 })
