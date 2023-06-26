@@ -1,66 +1,52 @@
 // house_pkg/pages/locate/index.ts
+import QQMap from '../../../utils/qqmap'
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-
+    point: [],
+    address: '',
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
   onLoad() {
-
+    this.getLocation()
   },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady() {
-
+  async getLocation() {
+    const { latitude, longitude } = await wx.getLocation({
+      isHighAccuracy: true,
+    })
+    this.getPoint(latitude, longitude)
   },
-
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow() {
-
+  async chooseLocation() {
+    const { latitude, longitude } = await wx.chooseLocation()
+    this.getPoint(latitude, longitude)
   },
-
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide() {
-
+  getPoint(latitude, longitude) {
+    console.log(latitude, longitude)
+    wx.showLoading({
+      title: '正在获取...',
+    })
+    QQMap.reverseGeocoder({
+      location: `${latitude},${longitude}`,
+      success: ({ result: { address } }) => {
+        console.log(address)
+        this.setData({ address })
+      },
+    })
+    QQMap.search({
+      keyword: '泰合百花公园',
+      location: `${latitude},${longitude}`,
+      page_size: 5,
+      success: (res) => {
+        const point = res.data.map(({ id, title, _distance }) => {
+          return { id, title, _distance }
+        })
+        this.setData({ point })
+      },
+      fail: (err) => {
+        console.log(err)
+      },
+      complete: () => {
+        wx.hideLoading()
+      },
+    })
   },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload() {
-
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh() {
-
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom() {
-
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage() {
-
-  }
 })

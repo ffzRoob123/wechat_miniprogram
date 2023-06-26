@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@vant/weapp": "^1.10.4",
+    "miniprogram-licia": "^1.38.1",
     "wechat-http": "^0.0.5",
     "wechat-validate": "^0.0.3"
   }

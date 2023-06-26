@@ -17,10 +17,12 @@ Component({
       const isLogin = !!getApp().token
       this.setData({ isLogin })
       const pageStack = getCurrentPages()
-      const { route } = pageStack.pop()
+      const currentPage = pageStack.pop()
       if (!isLogin) {
+        currentPage.onLoad = () => {}
+        currentPage.onShow = () => {}
         wx.redirectTo({
-          url: '/pages/login/index?redirectUrl=/' + route,
+          url: '/pages/login/index?redirectUrl=/' + currentPage.route,
         })
       }
     },
